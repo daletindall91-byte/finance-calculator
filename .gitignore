@@ -1,0 +1,12 @@
+node_modules/
+.env
+.DS_Store
+Thumbs.db
+
+# Local scratch/output folders from Codex work.
+work/
+outputs/
+
+# Logs and temporary files.
+*.log
+*.tmp
