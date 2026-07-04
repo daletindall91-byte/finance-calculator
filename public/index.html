@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skoda Finance Helper</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Skoda Finance Helper</h1>
+      <p>Build a quick PCP/HP example, adjust APR and deposit, then apply live D. M. Keith Skoda offer amounts where useful.</p>
+    </div>
+    <button id="refreshOffers" type="button">Refresh offers</button>
+  </header>
+
+  <main class="layout">
+    <section class="panel calculator">
+      <div class="section-title">
+        <h2>Calculator</h2>
+        <div class="segmented" role="group" aria-label="Finance type">
+          <button class="segment active" type="button" data-plan="pcp">PCP</button>
+          <button class="segment" type="button" data-plan="hp">HP</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <label>Vehicle price
+          <input id="price" type="number" min="0" step="100" value="30000">
+        </label>
+        <label>Customer deposit
+          <input id="customerDeposit" type="number" min="0" step="100" value="3000">
+        </label>
+        <label>Part exchange equity
+          <input id="partExchange" type="number" step="100" value="0">
+        </label>
+        <label>Skoda contribution
+          <input id="skodaContribution" type="number" min="0" step="50" value="0">
+        </label>
+        <label>Dealer contribution
+          <input id="dealerContribution" type="number" min="0" step="50" value="0">
+        </label>
+        <label>Electric grant / other
+          <input id="otherContribution" type="number" min="0" step="50" value="0">
+        </label>
+        <label>APR %
+          <input id="apr" type="number" min="0" step="0.1" value="5.9">
+        </label>
+        <label>Term months
+          <input id="term" type="number" min="1" step="1" value="48">
+        </label>
+        <label class="pcp-only">Optional final payment
+          <input id="balloon" type="number" min="0" step="100" value="12000">
+        </label>
+      </div>
+
+      <div class="result-strip">
+        <div>
+          <span>Amount financed</span>
+          <strong id="amountFinanced">&pound;0</strong>
+        </div>
+        <div>
+          <span>Monthly payment</span>
+          <strong id="monthlyPayment">&pound;0</strong>
+        </div>
+        <div>
+          <span>Total deposit support</span>
+          <strong id="supportTotal">&pound;0</strong>
+        </div>
+      </div>
+
+      <div class="ofp-box">
+        <div class="section-title compact-title">
+          <h2>Optional Final Payment Estimator</h2>
+          <button id="applyEstimatedBalloon" type="button" class="secondary">Use estimate</button>
+        </div>
+        <div class="grid">
+          <label>Reg number
+            <input id="regNumber" type="text" placeholder="AB12CDE">
+          </label>
+          <label>Make
+            <input id="vehicleMake" type="text" placeholder="Skoda">
+          </label>
+          <label>Model
+            <input id="vehicleModel" type="text" placeholder="Karoq">
+          </label>
+          <label>Year
+            <input id="vehicleYear" type="number" min="1900" max="2100" placeholder="2022">
+          </label>
+          <label>First registered
+            <input id="firstRegistered" type="month">
+          </label>
+          <label>Fuel
+            <input id="vehicleFuel" type="text" placeholder="Petrol">
+          </label>
+          <label>Colour
+            <input id="vehicleColour" type="text" placeholder="White">
+          </label>
+          <label>Power
+            <input id="vehiclePower" type="text" placeholder="150 BHP">
+          </label>
+          <label>Current mileage
+            <input id="currentMileage" type="number" min="0" step="1000" value="20000">
+          </label>
+          <label>Annual mileage
+            <input id="annualMileage" type="number" min="1000" step="1000" value="10000">
+          </label>
+          <label>Vehicle type
+            <select id="vehicleType">
+              <option value="ice">Petrol / Diesel / Hybrid</option>
+              <option value="ev">Electric</option>
+              <option value="performance">High spec / performance</option>
+            </select>
+          </label>
+          <label>Market confidence
+            <select id="marketConfidence">
+              <option value="normal">Normal</option>
+              <option value="strong">Strong residual</option>
+              <option value="weak">Weak residual</option>
+            </select>
+          </label>
+        </div>
+        <div class="actions tight-actions">
+          <button id="lookupReg" type="button">Lookup reg</button>
+          <span id="regLookupStatus"></span>
+        </div>
+        <div class="result-strip compact-results">
+          <div>
+            <span>Estimated age at end</span>
+            <strong id="endAge">-</strong>
+          </div>
+          <div>
+            <span>Estimated mileage at end</span>
+            <strong id="endMileage">-</strong>
+          </div>
+          <div>
+            <span>Suggested OFP guide</span>
+            <strong id="estimatedBalloon">&pound;0</strong>
+          </div>
+          <div>
+            <span>Guide as % of price</span>
+            <strong id="residualPercent">-</strong>
+          </div>
+        </div>
+        <p class="small">This guide is calibrated from current retail price, term, mileage and vehicle type. Proper GFV/OFP still needs the finance system or lender valuation.</p>
+      </div>
+
+      <div class="ofp-box valuation-box">
+        <div class="section-title compact-title">
+          <h2>Market Valuation</h2>
+          <button id="refreshValuation" type="button" class="secondary">Value from market</button>
+        </div>
+        <div class="grid">
+          <label>Target margin
+            <input id="targetMargin" type="number" min="0" step="100" value="2000">
+          </label>
+          <label>Top 5 retail guide
+            <input id="retailGuide" type="text" readonly placeholder="Run valuation">
+          </label>
+          <label>Buy-in guide
+            <input id="buyingGuide" type="text" readonly placeholder="Run valuation">
+          </label>
+        </div>
+        <div class="result-strip compact-results">
+          <div>
+            <span>Retail range</span>
+            <strong id="retailRange">-</strong>
+          </div>
+          <div>
+            <span>Market retail</span>
+            <strong id="marketRetailGuide">-</strong>
+          </div>
+          <div>
+            <span>Comparables used</span>
+            <strong id="comparableCount">-</strong>
+          </div>
+          <div>
+            <span>Avg days advertised</span>
+            <strong id="averageDaysAdvertised">-</strong>
+          </div>
+          <div>
+            <span>Confidence</span>
+            <strong id="valuationConfidence">-</strong>
+          </div>
+          <div>
+            <span>Spec match</span>
+            <strong id="specMatchStatus">-</strong>
+          </div>
+          <div>
+            <span>Buy-in deductions</span>
+            <strong id="buyInDeductions">-</strong>
+          </div>
+        </div>
+        <div class="actions tight-actions">
+          <button id="applyRetailGuide" type="button">Use top 5 retail</button>
+          <a id="valuationSearchLink" href="#" target="_blank" rel="noreferrer">Open Auto Trader search</a>
+          <span id="valuationStatus"></span>
+        </div>
+        <div id="valuationComps" class="valuation-comps"></div>
+        <p class="small">Uses live UK retailer adverts as comparables and excludes private sales where the source labels seller type. Average days is current advert age, not guaranteed days-to-sell.</p>
+      </div>
+
+      <div class="grid notes-grid">
+        <label>Customer
+          <input id="customerName" type="text" placeholder="Customer name">
+        </label>
+        <label>Vehicle
+          <input id="vehicleName" type="text" placeholder="Karoq SEL, Enyaq 85 Sportline...">
+        </label>
+      </div>
+
+      <label>Notes
+        <textarea id="notes" rows="4" placeholder="Example: &pound;17k-&pound;18k budget, wants SEL minimum spec, white/solid grey/black."></textarea>
+      </label>
+
+      <div class="actions">
+        <button id="copySummary" type="button">Copy summary</button>
+        <button id="resetCalc" type="button" class="secondary">Reset</button>
+        <span id="copyStatus"></span>
+      </div>
+
+      <textarea id="summary" rows="8" readonly></textarea>
+    </section>
+
+    <section class="panel offers">
+      <div class="section-title">
+        <h2>D. M. Keith Skoda Offers</h2>
+          <input id="offerSearch" type="search" placeholder="Search model or offer">
+      </div>
+      <p class="small" id="offerMeta">Use Refresh offers to pull from current D. M. Keith Skoda pages.</p>
+      <div id="offerList" class="offer-list"></div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
