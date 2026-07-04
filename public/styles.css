@@ -1,0 +1,349 @@
+:root {
+  --ink: #12211c;
+  --muted: #62716b;
+  --line: #d8dfdc;
+  --brand: #0e3a2f;
+  --blue: #0b72b9;
+  --surface: #ffffff;
+  --page: #f3f6f5;
+  --good: #1f7a4d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  background: var(--page);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  padding: 22px 28px;
+  background: var(--brand);
+  color: #fff;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+.topbar p {
+  margin-top: 6px;
+  color: #dce8e4;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+button.secondary,
+.segment {
+  background: #e7ecea;
+  color: var(--ink);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(420px, 1.1fr) minmax(360px, 0.9fr);
+  gap: 18px;
+  padding: 18px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: #eef2f0;
+  border-radius: 7px;
+}
+
+.segment {
+  padding: 8px 12px;
+}
+
+.segment.active {
+  background: var(--brand);
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.notes-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+}
+
+textarea {
+  resize: vertical;
+  margin-top: 12px;
+}
+
+.result-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 16px 0 4px;
+}
+
+.ofp-box {
+  margin-top: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfcfc;
+}
+
+.compact-title {
+  margin-bottom: 12px;
+}
+
+.compact-results {
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.compact-results strong {
+  font-size: 18px;
+}
+
+.result-strip div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #f9fbfa;
+}
+
+.result-strip span,
+.small {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.result-strip strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 22px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.tight-actions {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+#copyStatus {
+  color: var(--good);
+  font-size: 14px;
+}
+
+#regLookupStatus {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+#valuationStatus {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+#valuationSearchLink {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  padding: 9px 10px;
+  color: var(--brand);
+  background: #eef2f0;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.valuation-comps {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.valuation-comp {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+}
+
+.valuation-comp h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.valuation-comp p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.valuation-comp a {
+  color: var(--brand);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+#offerSearch {
+  max-width: 240px;
+}
+
+.offer-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  max-height: calc(100vh - 190px);
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.offer-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.offer-card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.offer-card .meta {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.offer-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 6px 9px;
+  background: #eef2f0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.offer-card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.offer-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.offer-actions a {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  padding: 9px 10px;
+  color: var(--brand);
+  background: #eef2f0;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .topbar,
+  .section-title {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .layout,
+  .grid,
+  .notes-grid,
+  .result-strip {
+    grid-template-columns: 1fr;
+  }
+
+  #offerSearch {
+    max-width: none;
+  }
+}
