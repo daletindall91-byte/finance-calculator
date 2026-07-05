@@ -180,12 +180,28 @@ async function lookupReg(registrationNumber) {
       body: JSON.stringify({ registrationNumber: reg }),
     });
     if (response.ok) {
-      const vehicle = await response.json();
-      return { ok: true, source: "DVLA vehicle enquiry API", vehicle: normaliseVehicle(reg, vehicle) };
+      const vehicle = normaliseVehicle(reg, await response.json());
+      await enrichVehicleFromCarCheck(vehicle, reg);
+      return {
+        ok: true,
+        source: vehicle.modelSource ? "DVLA vehicle enquiry API + CarCheck model fallback" : "DVLA vehicle enquiry API",
+        vehicle,
+      };
     }
   }
 
   return lookupRegFromDvlaPublicSite(reg);
+}
+
+async function enrichVehicleFromCarCheck(vehicle, reg) {
+  if (vehicle.model) return vehicle;
+  try {
+    const enrichment = await lookupRegFromCarCheck(reg, vehicle.make);
+    Object.assign(vehicle, Object.fromEntries(Object.entries(enrichment).filter(([, value]) => value)));
+  } catch {
+    // Useful enrichment only. The DVLA result is still returned.
+  }
+  return vehicle;
 }
 
 function normaliseVehicle(reg, vehicle) {
@@ -304,12 +320,7 @@ async function lookupRegFromDvlaPublicSite(reg) {
     taxStatus: rows["Vehicle status"],
     engineCapacity: rows["Cylinder capacity"],
   });
-  try {
-    const enrichment = await lookupRegFromCarCheck(reg, vehicle.make);
-    Object.assign(vehicle, Object.fromEntries(Object.entries(enrichment).filter(([, value]) => value)));
-  } catch {
-    // Useful enrichment only. DVLA result is still returned.
-  }
+  await enrichVehicleFromCarCheck(vehicle, reg);
   return { ok: true, source: vehicle.modelSource ? "DVLA public vehicle enquiry + CarCheck model fallback" : "DVLA public vehicle enquiry", vehicle };
 }
 
